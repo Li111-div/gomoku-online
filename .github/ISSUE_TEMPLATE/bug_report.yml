@@ -1,0 +1,83 @@
+name: 缺陷报告
+description: 报告一个可以复现的问题
+title: '[缺陷] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！信息填得越完整，修复就越快。
+        如果只是使用上的疑问，请到 Discussions 而不是开 Issue。
+
+  - type: textarea
+    id: what
+    attributes:
+      label: 问题描述
+      description: 发生了什么？你期望发生什么？
+      placeholder: |
+        实际：白方落子后，黑方那边没有出现这颗棋子。
+        期望：双方棋盘应该保持一致。
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 尽量写到「照着做就能重现」的程度
+      placeholder: |
+        1. 启动服务端：python server/server.py
+        2. 开两个浏览器窗口，都打开 http://127.0.0.1:8080
+        3. 窗口 A 创建房间，窗口 B 用房间号加入
+        4. 窗口 A 点击 (7,7) 落子
+        5. 窗口 B 的棋盘上没有出现黑子
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - 其他
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python 版本
+      description: 运行 `python --version` 的结果
+      placeholder: '3.12.0'
+
+  - type: input
+    id: browser
+    attributes:
+      label: 浏览器与版本
+      placeholder: 'Chrome 130 / Edge 130 / Safari 18'
+
+  - type: input
+    id: commit
+    attributes:
+      label: 版本或提交号
+      description: Release 版本号，或 `git rev-parse --short HEAD` 的结果
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 控制台报错 / 服务端日志
+      description: 浏览器按 F12 打开控制台，以及服务端窗口里的输出
+      render: shell
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 我已经搜索过现有 Issue，确认没有重复
+          required: true
+        - label: 我用的是最新版本（主分支或最新 Release）
+          required: true

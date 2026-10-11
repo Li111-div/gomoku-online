@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="五子棋在线对战：所有对局逻辑由服务端运行，多房间并行，浏览器直接开玩。">
+<title>五子棋 · 在线对战</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235566f0'/%3E%3Cpath d='M9 7v18M14 7v18M19 7v18M24 7v18M7 9h18M7 14h18M7 19h18M7 24h18' stroke='%23ffffff' stroke-width='1.2' opacity='0.5'/%3E%3Ccircle cx='14' cy='14' r='3.4' fill='%231a1d26'/%3E%3Ccircle cx='19' cy='19' r='3.4' fill='%23fbfbf8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles/theme.css">
+<link rel="stylesheet" href="styles/layout.css">
+<link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+
+<!-- ==================== 顶部栏 ==================== -->
+<header class="topbar">
+  <div class="brand" data-nav="home" role="button" tabindex="0">
+    <svg class="brand-logo" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="1" width="30" height="30" rx="8" fill="var(--accent)"/>
+      <g stroke="#fff" stroke-width="1.2" opacity=".55">
+        <path d="M9 7v18M14 7v18M19 7v18M24 7v18M7 9h18M7 14h18M7 19h18M7 24h18"/>
+      </g>
+      <circle cx="14" cy="14" r="3.4" fill="#1a1d26"/>
+      <circle cx="19" cy="19" r="3.4" fill="#fbfbf8"/>
+    </svg>
+    <div class="brand-text">
+      <strong>五子棋</strong>
+      <span>在线对战</span>
+    </div>
+  </div>
+
+  <nav class="topnav">
+    <button class="navlink is-active" data-nav="home">首页</button>
+    <button class="navlink" data-nav="lobby">对战大厅</button>
+    <button class="navlink" data-nav="help">操作教程</button>
+  </nav>
+
+  <div class="topbar-actions">
+    <button class="icon-btn" id="btn-sound" title="音效开关" aria-label="音效开关">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-theme" title="切换主题" aria-label="切换主题">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M2 12h2.6M19.4 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- ==================== ① 首页 ==================== -->
+  <section class="view is-active" id="view-home">
+    <div class="hero">
+      <h1>来一局五子棋</h1>
+      <p class="hero-sub">打开网页就能玩。所有对局判定都在服务端完成，多个房间同时开、互不干扰，还能进别人的房间观战。</p>
+      <div class="hero-tags">
+        <span class="tag">服务端权威判定</span>
+        <span class="tag">多房间并行</span>
+        <span class="tag">支持观战</span>
+        <span class="tag">断线可重连</span>
+      </div>
+    </div>
+
+    <div class="mode-grid">
+      <button class="mode-card is-primary" data-action="lobby">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16.5 11.2a3 3 0 0 0 0-6"/><path d="M17 19a5.6 5.6 0 0 0-2-4.3"/></svg>
+        </span>
+        <strong>进入对战大厅</strong>
+        <span class="mode-desc">看看现在有哪些房间，加入一局，或者自己开一间等朋友来。</span>
+        <span class="mode-cta">进入大厅</span>
+      </button>
+
+      <button class="mode-card" data-action="practice">
+        <span class="mode-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </span>
+        <strong>练习模式</strong>
+        <span class="mode-desc">一个人控制黑白双方，熟悉棋盘手感，不影响别人。</span>
+        <span class="mode-cta">开始练习</span>
+      </button>
+    </div>
+
+    <div class="notice">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+      <div>
+        <strong>第一次来？</strong>
+        先看 <a href="#" data-nav="help">操作教程</a>，里面有完整步骤和常见问题。
+        同一时间可以开任意多个房间，互不影响。
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ② 对战大厅 ==================== -->
+  <section class="view" id="view-lobby">
+    <div class="view-head">
+      <button class="btn-back" data-nav="home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>返回
+      </button>
+      <div>
+        <h2>对战大厅</h2>
+        <p>所有房间实时列出，加入一局或自己开一间。</p>
+      </div>
+      <span class="lobby-badge" id="lobby-badge"><i></i><span>连接中…</span></span>
+    </div>
+
+    <!-- 用 file:// 打开、还没连上服务端时的引导 -->
+    <div class="panel" id="server-setup" hidden>
+      <div class="panel-head"><i class="num">!</i><h3>还没有连接上服务端</h3></div>
+      <p class="hint">
+        你可能是直接双击打开了网页文件。请填写服务端地址（形如
+        <code>http://192.168.1.5:8080</code>），或者直接用服务端给出的地址访问本页面。
+      </p>
+      <div class="lobby-addr-row">
+        <input type="text" id="server-url" class="code-input"
+               spellcheck="false" placeholder="http://192.168.1.5:8080">
+        <button class="btn btn-primary" id="btn-server-connect">连接</button>
+      </div>
+      <div class="inline-status" id="server-status"></div>
+    </div>
+
+    <div id="lobby-main">
+      <div class="panel">
+        <div class="lobby-me">
+          <label for="lobby-name">我的昵称</label>
+          <input type="text" id="lobby-name" maxlength="12" autocomplete="off"
+                 placeholder="给自己起个名字">
+          <button class="btn btn-primary" id="btn-create-room">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>创建房间
+          </button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <i class="num">·</i><h3>房间列表</h3>
+          <button class="btn btn-sm" id="btn-refresh-rooms">刷新</button>
+        </div>
+
+        <div class="lobby-addr-row join-row">
+          <input type="text" id="join-code" class="code-input" maxlength="4"
+                 spellcheck="false" placeholder="输入 4 位房间号直接加入">
+          <button class="btn" id="btn-join-code">加入</button>
+        </div>
+
+        <div class="room-list" id="lobby-rooms"></div>
+        <div class="lobby-empty" id="lobby-empty">正在获取房间列表…</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><i class="num">?</i><h3>怎么和别人一起玩？</h3></div>
+        <ol class="help-steps">
+          <li>把这个网页的地址（例如 <code>http://192.168.1.5:8080</code>）发给朋友。</li>
+          <li>点上面的<b>「创建房间」</b>，会得到一个 4 位房间号。</li>
+          <li>把房间号告诉朋友，他在这个大厅输入房间号即可加入。</li>
+          <li>双方到齐后自动开始，黑方先手。其他人可以点<b>「观战」</b>围观。</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ③ 对局 ==================== -->
+  <section class="view view-game" id="view-game">
+    <div class="game-grid">
+
+      <aside class="col-players">
+        <div class="player-card" id="p-me">
+          <span class="stone-dot"></span>
+          <div class="player-meta">
+            <strong class="player-name">你</strong>
+            <span class="player-color">黑方</span>
+          </div>
+          <span class="turn-pill">落子中</span>
+        </div>
+
+        <div class="vs-divider"><span>VS</span></div>
+
+        <div class="player-card" id="p-op">
+          <span class="stone-dot"></span>
+          <div class="player-meta">
+            <strong class="player-name">对手</strong>
+            <span class="player-color">白方</span>
+          </div>
+          <span class="turn-pill">等待中</span>
+        </div>
+
+        <div class="conn-pill" id="conn-pill">
+          <span class="dot"></span><span class="conn-text">未连接</span>
+        </div>
+
+        <div class="chat-panel">
+          <div class="chat-head">
+            <span class="chat-dot" id="chat-dot"></span>
+            <strong>聊天</strong>
+            <span class="chat-peer" id="chat-peer">未进入房间</span>
+          </div>
+          <div class="chat-body" id="chat-body">
+            <div class="chat-empty">还没有消息<br>打个招呼吧</div>
+          </div>
+          <div class="chat-foot">
+            <input type="text" id="msg-input" class="chat-input"
+                   placeholder="进入房间后可聊天" maxlength="60" autocomplete="off">
+            <button class="btn btn-primary chat-send" id="btn-send-msg"
+                    title="发送" aria-label="发送">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 3.2L2.8 10.9l6.6 2.7 2.7 6.6L21.5 3.2z"/><path d="M9.4 13.6L21.5 3.2"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button class="btn btn-ghost btn-block" id="btn-leave">退出房间</button>
+      </aside>
+
+      <div class="col-board">
+        <div class="board-shell" id="board-shell">
+          <canvas id="board"></canvas>
+          <div class="board-banner" id="board-banner" hidden>
+            <div class="banner-inner">
+              <span class="banner-emoji" id="banner-emoji"></span>
+              <strong id="banner-title"></strong>
+              <p id="banner-sub"></p>
+              <button class="btn btn-primary btn-sm" id="banner-action" hidden></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="col-side">
+        <div class="side-block">
+          <h4>房间信息</h4>
+          <div class="stat-row"><span>房间号</span><b id="room-code">—</b></div>
+          <div class="stat-row"><span>观战人数</span><b id="spectate-count">0</b></div>
+        </div>
+
+        <div class="side-block">
+          <h4>对局信息</h4>
+          <div class="stat-row"><span>手数</span><b id="stat-moves">0</b></div>
+          <div class="stat-row"><span>轮次</span><b id="stat-turn">黑方</b></div>
+          <label class="switch-row">
+            <span>显示坐标</span>
+            <input type="checkbox" id="chk-coords" checked>
+            <i class="switch"></i>
+          </label>
+        </div>
+
+        <div class="side-block">
+          <h4>操作</h4>
+          <div class="btn-stack">
+            <button class="btn btn-block" id="btn-restart">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg>重新开始
+            </button>
+            <button class="btn btn-block" id="btn-undo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14l-4-4 4-4"/><path d="M5 10h9a5 5 0 0 1 0 10h-3"/></svg>请求悔棋
+            </button>
+            <button class="btn btn-danger btn-block" id="btn-surrender">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4v16M6 5h11l-2 3.5L17 12H6"/></svg>认输
+            </button>
+          </div>
+        </div>
+
+        <div class="side-block side-block-grow">
+          <h4>对局记录</h4>
+          <div class="game-log" id="game-log"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ==================== ④ 操作教程 ==================== -->
+  <section class="view" id="view-help">
+    <div class="view-head">
+      <button class="btn-back" data-nav="home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>返回
+      </button>
+      <div>
+        <h2>操作教程</h2>
+        <p>从零开始，几步就能和别人下上一局。</p>
+      </div>
+    </div>
+
+    <div class="help-block">
+      <h3><i>0</i>开始之前</h3>
+      <ul class="help-list">
+        <li>需要有人在自己的电脑上<b>运行服务端</b>（双击 <code>start-server.bat</code>）。</li>
+        <li>服务端启动后会打印一个地址，形如 <code>http://192.168.1.5:8080</code>。</li>
+        <li>把这个地址发给朋友，大家用浏览器打开<b>这个地址</b>（不是双击网页文件）。</li>
+        <li>所有人需要连<b>同一个 Wi-Fi / 路由器</b>。</li>
+      </ul>
+    </div>
+
+    <div class="help-block">
+      <h3><i>1</i>开一局</h3>
+      <ol class="help-steps">
+        <li>点顶部导航的<b>「对战大厅」</b>。</li>
+        <li>先填一个<b>昵称</b>，方便别人认出你。</li>
+        <li>点<b>「创建房间」</b>，你会得到一个 4 位房间号。</li>
+        <li>把房间号告诉朋友，他在大厅的输入框里填进去、点「加入」。</li>
+        <li>人齐了自动开始，<b>房主执黑先手</b>。</li>
+      </ol>
+    </div>
+
+    <div class="help-block">
+      <h3><i>2</i>加入别人的房间</h3>
+      <ul class="help-list">
+        <li>大厅的<b>房间列表</b>会实时显示所有房间，状态是「等待中」的点「加入」即可。</li>
+        <li>如果房间已经开了，你也可以点<b>「观战」</b>进去看。</li>
+        <li>已经满员的房间只能观战，不能加入。</li>
+      </ul>
+    </div>
+
+    <div class="help-block">
+      <h3><i>3</i>对局中能做什么</h3>
+      <ul class="help-list">
+        <li><b>落子</b>：点击棋盘交叉点，鼠标悬停会显示预览棋子。</li>
+        <li><b>胜负</b>：横、竖、斜任意方向先连成五子者获胜。</li>
+        <li><b>重新开始</b>：向对手发出请求，对方同意后双方棋盘同时清空。</li>
+        <li><b>请求悔棋</b>：撤回双方各一步，同样需要对方同意。</li>
+        <li><b>认输</b>：直接判对方获胜。</li>
+        <li><b>聊天</b>：左侧聊天面板，打字后回车即可发送。</li>
+      </ul>
+    </div>
+
+    <div class="help-block">
+      <h3><i>4</i>常见问题</h3>
+      <div class="faq">
+        <details>
+          <summary>为什么对局判定要放在服务端？</summary>
+          <p>因为这样可以做到<b>绝对公平、绝不同步出错</b>。落子是否合法、谁连成了五子，全部由服务端一台机器算，客户端只是把结果画出来。客户端哪怕被改过，也无法作弊或算出不一样的结果。</p>
+        </details>
+        <details>
+          <summary>能同时开很多局吗？</summary>
+          <p>可以。每个房间有自己独立的棋局，互相完全隔离。一台服务端同时跑几十个房间都没有问题。</p>
+        </details>
+        <details>
+          <summary>不小心刷新了页面怎么办？</summary>
+          <p>刷新后会自动重连，服务端会把你的<b>席位保留 3 分钟</b>，重连上来就能接着下，棋局不会丢。</p>
+        </details>
+        <details>
+          <summary>朋友打不开我的地址？</summary>
+          <p>按顺序排查：① 是否连了同一个 Wi-Fi；② 地址是否抄错（注意端口号）；③ 服务端窗口是否还开着；④ 电脑的防火墙是否拦截了该端口，可以试着允许 Python 通过防火墙。</p>
+        </details>
+        <details>
+          <summary>服务端崩了会怎样？</summary>
+          <p>所有对局都会中断。因为权威状态只存在服务端，客户端不保留棋局。重新启动服务端后需要重新开局。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast-host" id="toast-host"></div>
+
+<div class="modal-host" id="modal-host" hidden>
+  <div class="modal-mask"></div>
+  <div class="modal" role="dialog" aria-modal="true">
+    <span class="modal-icon" id="modal-icon"></span>
+    <h3 id="modal-title"></h3>
+    <p id="modal-text"></p>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/board.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/net.js"></script>
+<script src="js/views.js"></script>
+<!-- 下面三个模块的方法会混入 App，必须在 app.js 之前加载 -->
+<script src="js/chat.js"></script>
+<script src="js/lobby.js"></script>
+<script src="js/gameview.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

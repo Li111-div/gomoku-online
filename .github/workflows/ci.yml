@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  # ---------------------------------------------------------------- 门禁 + 单测
+  # 这两个都快，且不依赖浏览器，所以放在前面先跑
+  check:
+    name: 门禁与单元测试
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 提交前自动化门禁
+        run: python tools/preflight.py
+
+      - name: 服务端棋局规则单元测试
+        run: python tests/test_gomoku.py
+
+  # ---------------------------------------------------------------- 端到端测试
+  e2e:
+    name: 浏览器端到端测试
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装测试依赖
+        run: npm ci --no-audit --no-fund
+
+      - name: 下载 Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: 运行端到端测试
+        run: node tests/e2e.mjs
+        env:
+          PYTHON: python3
+
+      - name: 上传失败时的截图
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-failure
+          path: |
+            docs/screenshots/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # ---------------------------------------------------------------- 多版本兼容
+  # 服务端声称支持 Python 3.7+，这里实际验证一下
+  compat:
+    name: Python ${{ matrix.python }} 兼容性
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.8', '3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: 服务端语法检查
+        run: |
+          python -m compileall -q server tools tests
+          echo "全部文件编译通过"
+
+      - name: 服务端规则单元测试
+        run: python tests/test_gomoku.py

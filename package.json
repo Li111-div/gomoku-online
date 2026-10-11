@@ -1,0 +1,19 @@
+{
+  "name": "gomoku-online",
+  "version": "1.0.0",
+  "private": true,
+  "description": "服务端权威的五子棋在线对战 —— 零运行时依赖",
+  "keywords": ["gomoku", "five-in-a-row", "websocket", "game", "python"],
+  "license": "MIT",
+  "scripts": {
+    "start": "python server/server.py",
+    "start:open": "python server/server.py --open",
+    "check": "python tools/preflight.py",
+    "test": "python tests/test_gomoku.py",
+    "test:e2e": "node tests/e2e.mjs",
+    "verify": "npm run check && npm run test && npm run test:e2e"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}

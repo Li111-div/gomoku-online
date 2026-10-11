@@ -1,0 +1,24 @@
+# 统一行尾符，避免不同平台检出结果不一致。
+# 没有这个文件时，行为取决于每个人本地的 core.autocrlf 设置，
+# 同一个文件在不同机器上可能换行符不同，产生无意义的 diff。
+
+# 默认：仓库内统一用 LF
+* text=auto eol=lf
+
+# Windows 批处理必须用 CRLF
+# 否则 goto 标签、多行 if 块等结构可能解析出错
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 二进制文件不做任何转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pyc binary
+
+# 截图等资源在 diff 中折叠
+docs/screenshots/*.png binary -diff

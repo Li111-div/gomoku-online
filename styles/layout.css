@@ -1,0 +1,360 @@
+/* ============================================================
+   layout.css — 顶部栏、视图容器、对局网格、响应式
+   ============================================================ */
+
+/* ---------- 顶部栏 ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 62px;
+  padding: 0 20px;
+  background: var(--glass);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 4px 4px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+  flex-shrink: 0;
+}
+.brand:hover { background: var(--surface-3); }
+
+.brand-logo { width: 32px; height: 32px; flex-shrink: 0; }
+.brand-logo rect { fill: var(--accent); stroke: none; }
+.brand-logo g path { fill: none; stroke: #fff; stroke-width: 1.2; }
+
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-text strong { font-size: 15px; font-weight: 650; letter-spacing: -.01em; }
+.brand-text span { font-size: 11px; color: var(--text-3); letter-spacing: .04em; }
+
+.topnav { display: flex; gap: 4px; margin-left: 6px; }
+
+.navlink {
+  padding: 7px 14px;
+  border-radius: var(--r-full);
+  font-size: 14px;
+  color: var(--text-2);
+  transition: all var(--dur) var(--ease);
+  white-space: nowrap;
+}
+.navlink:hover { background: var(--surface-3); color: var(--text); }
+.navlink.is-active { background: var(--accent-soft); color: var(--accent); font-weight: 550; }
+
+.topbar-actions { margin-left: auto; display: flex; gap: 8px; }
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  padding: 9px;
+  border-radius: var(--r-sm);
+  color: var(--text-2);
+  background: transparent;
+  transition: all var(--dur) var(--ease);
+}
+.icon-btn:hover { background: var(--surface-3); color: var(--text); }
+.icon-btn.is-off { opacity: .45; }
+
+/* ---------- 视图舞台 ---------- */
+.stage {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+.view { display: none; animation: viewIn .32s var(--ease); }
+.view.is-active { display: block; }
+
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.view-game.is-active { display: block; }
+.view-game .stage { padding: 0; }
+
+/* 视图内的最大宽度约束（对局页除外） */
+#view-home, #view-host, #view-guest, #view-help {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* ---------- 首页 hero ---------- */
+.hero { text-align: center; padding: 20px 0 8px; }
+
+.hero h1 {
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 700;
+  letter-spacing: -.025em;
+  line-height: 1.2;
+}
+
+.hero-sub {
+  margin: 14px auto 0;
+  max-width: 520px;
+  color: var(--text-2);
+  font-size: 15px;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tag {
+  font-size: 12.5px;
+  padding: 4px 12px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ---------- 首页模式卡片 ---------- */
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 36px;
+}
+
+.mode-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 24px 22px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.mode-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-ring);
+}
+.mode-card:active { transform: translateY(-1px); }
+
+/* 首选入口：局域网大厅 */
+.mode-card.is-primary {
+  border-color: var(--accent-ring);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-sm);
+}
+.mode-card.is-primary .mode-icon {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.mode-icon {
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+  border-radius: var(--r-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.mode-card strong { font-size: 16.5px; font-weight: 620; letter-spacing: -.01em; }
+.mode-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
+
+.mode-cta {
+  margin-top: auto;
+  padding-top: 12px;
+  font-size: 13.5px;
+  font-weight: 550;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.mode-cta::after { content: "→"; transition: transform var(--dur) var(--ease); }
+.mode-card:hover .mode-cta::after { transform: translateX(4px); }
+
+/* ---------- 通知条 ---------- */
+.notice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 28px;
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+.notice svg { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; color: var(--accent); }
+.notice strong { color: var(--text); }
+
+/* ---------- 视图头部 ---------- */
+.view-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.view-head h2 { font-size: 23px; font-weight: 660; letter-spacing: -.02em; }
+.view-head p { font-size: 13.5px; color: var(--text-2); margin-top: 3px; }
+.view-head > div { flex: 1; min-width: 200px; }
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 12px 7px 8px;
+  margin-top: 3px;
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: all var(--dur) var(--ease);
+  flex-shrink: 0;
+}
+.btn-back svg { width: 17px; height: 17px; }
+.btn-back:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface-2); }
+
+/* ---------- 对局三栏网格 ---------- */
+.view-game { max-width: 1320px; margin: 0 auto; padding: 20px; }
+
+/* 三栏等高：网格行高由脚本按棋盘实际高度设定，
+   左右两栏拉伸对齐，使整体呈现整齐的长方形 */
+.game-grid {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr) 264px;
+  grid-template-areas: "players board side";
+  gap: 18px;
+  align-items: stretch;
+}
+
+.col-players {
+  grid-area: players;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.col-board {
+  grid-area: board;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.col-side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 左栏「退出对局」贴底 */
+.col-players > #btn-leave { margin-top: auto; }
+
+/* 棋盘容器：始终正方形，不产生尺寸反馈循环 */
+.board-shell {
+  position: relative;
+  width: 100%;
+  max-width: min(620px, calc(100vh - 210px));
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r-md);
+  box-shadow: var(--board-shadow);
+}
+
+#board {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-md);
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1040px) {
+  .game-grid {
+    grid-template-columns: minmax(0, 1fr) 264px;
+    grid-template-areas:
+      "board   side"
+      "players side";
+    align-items: start;
+  }
+  .col-players { flex-direction: row; flex-wrap: wrap; align-items: center; overflow: visible; }
+  .col-side { overflow: visible; }
+  .col-players .player-card { flex: 1 1 150px; }
+  .col-players .side-block,
+  .col-players .chat-panel { flex: 1 1 100%; }
+  .chat-panel { height: 300px; }
+  .game-log { max-height: 200px; }
+  .col-players > #btn-leave { margin-top: 0; }
+  .vs-divider { display: none; }
+  .col-players .btn-block { flex: 1 1 100%; }
+  .board-shell { max-width: 100%; }
+}
+
+@media (max-width: 760px) {
+  .stage { padding: 18px 14px 48px; }
+
+  /* 顶栏在窄屏要放得下：缩小内边距、字号与图标 */
+  .topbar { padding: 0 10px; gap: 6px; height: 56px; }
+  .brand { padding: 4px; gap: 7px; }
+  .brand-text span { display: none; }
+  .brand-text strong { font-size: 14px; }
+  .topnav { margin-left: 0; gap: 2px; }
+  .navlink { padding: 6px 9px; font-size: 13px; }
+  .icon-btn { width: 34px; height: 34px; padding: 7px; }
+
+  .mode-grid { grid-template-columns: 1fr; gap: 12px; margin-top: 26px; }
+  .mode-card { padding: 18px; }
+
+  .view-game { padding: 12px; }
+  .game-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "board" "players" "side";
+    gap: 12px;
+  }
+  .col-players { flex-direction: row; }
+  .col-players .player-card { flex: 1 1 0; min-width: 0; }
+  .col-players .side-block,
+  .col-players .chat-panel { flex: 1 1 100%; }
+  .col-players .btn-block { display: none; }
+  .chat-panel { height: 262px; }
+  .board-shell { max-width: 100%; }
+  .col-side { flex-direction: column; }
+  .side-block-grow { min-height: 0; }
+  .game-log { max-height: 150px; }
+}
+
+@media (max-width: 460px) {
+  /* 品牌图标本身就是回首页的入口，窄屏下省掉「首页」这一项 */
+  .topnav .navlink[data-nav="home"] { display: none; }
+}
+
+@media (max-width: 420px) {
+  .player-card { padding: 10px; }
+  .player-name { font-size: 13px; }
+  .turn-pill { display: none; }
+}

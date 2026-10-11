@@ -1,0 +1,35 @@
+# ---------------------------------------------------------------- Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---------------------------------------------------------------- Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------------------------------------------------------------- 测试产物
+test-results/
+playwright-report/
+.pytest_cache/
+coverage/
+*.lcov
+
+# ---------------------------------------------------------------- 编辑器与系统
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------------------------------------------------------------- 临时文件
+*.log
+*.tmp
+*.bak

@@ -1,0 +1,191 @@
+/* ============================================================
+   theme.css — 设计令牌、明暗主题、基础重置
+   ============================================================ */
+
+:root {
+  /* 表面与背景 */
+  --bg:            #eef0f6;
+  --bg-glow-1:     #e7ebf9;
+  --bg-glow-2:     #f7f1ea;
+  --surface:       #ffffff;
+  --surface-2:     #f6f7fb;
+  --surface-3:     #eef0f6;
+
+  /* 半透明表面：顶栏毛玻璃、棋盘浮层。
+     预先算好色值，避免使用 color-mix() 导致旧浏览器失效 */
+  --glass:         rgba(255, 255, 255, .82);
+  --overlay:       rgba(255, 255, 255, .78);
+
+  /* 边框 */
+  --border:        rgba(22, 26, 40, .10);
+  --border-strong: rgba(22, 26, 40, .18);
+
+  /* 文字 */
+  --text:          #191c26;
+  --text-2:        #5b6178;
+  --text-3:        #8d93a6;
+
+  /* 主题色 */
+  --accent:        #5566f0;
+  --accent-hover:  #4655e0;
+  --accent-soft:   rgba(85, 102, 240, .10);
+  --accent-ring:   rgba(85, 102, 240, .30);
+  --on-accent:     #ffffff;
+
+  /* 语义色 */
+  --success:       #15a05a;
+  --success-soft:  rgba(21, 160, 90, .12);
+  --danger:        #e04b4b;
+  --danger-soft:   rgba(224, 75, 75, .12);
+  --warn:          #cf8b12;
+  --warn-soft:     rgba(207, 139, 18, .14);
+
+  /* 阴影 */
+  --shadow-xs: 0 1px 2px rgba(16, 18, 28, .05);
+  --shadow-sm: 0 2px 8px rgba(16, 18, 28, .07);
+  --shadow-md: 0 10px 28px rgba(16, 18, 28, .10);
+  --shadow-lg: 0 24px 60px rgba(16, 18, 28, .18);
+
+  /* 圆角 */
+  --r-xs: 7px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-full: 999px;
+
+  /* 排版 */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+
+  /* 动效 */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+  --dur: .22s;
+
+  /* 棋盘 */
+  --board-shadow: 0 18px 46px rgba(60, 42, 20, .22), 0 2px 6px rgba(0,0,0,.10);
+}
+
+[data-theme="dark"] {
+  --bg:            #0e1016;
+  --bg-glow-1:     #12151f;
+  --bg-glow-2:     #16141a;
+  --surface:       #181b24;
+  --surface-2:     #1e222d;
+  --surface-3:     #242938;
+
+  --glass:         rgba(24, 27, 36, .82);
+  --overlay:       rgba(24, 27, 36, .78);
+
+  --border:        rgba(255, 255, 255, .09);
+  --border-strong: rgba(255, 255, 255, .17);
+
+  --text:          #e9ecf5;
+  --text-2:        #a3aabd;
+  --text-3:        #737b91;
+
+  --accent:        #6d7cff;
+  --accent-hover:  #7f8cff;
+  --accent-soft:   rgba(109, 124, 255, .16);
+  --accent-ring:   rgba(109, 124, 255, .38);
+  --on-accent:     #0e1016;
+
+  --success:       #3ddc84;
+  --success-soft:  rgba(61, 220, 132, .14);
+  --danger:        #ff6b6b;
+  --danger-soft:   rgba(255, 107, 107, .14);
+  --warn:          #f0b64a;
+  --warn-soft:     rgba(240, 182, 74, .14);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, .30);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, .34);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, .44);
+  --shadow-lg: 0 26px 64px rgba(0, 0, 0, .60);
+
+  --board-shadow: 0 18px 46px rgba(0, 0, 0, .55), 0 2px 6px rgba(0,0,0,.4);
+}
+
+/* ---------- 重置 ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  background-image:
+    radial-gradient(1100px 620px at 12% -8%, var(--bg-glow-1), transparent 62%),
+    radial-gradient(900px 560px at 96% 4%, var(--bg-glow-2), transparent 58%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+h1, h2, h3, h4, p, ol, ul, figure { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+
+button, input, textarea, select {
+  font: inherit;
+  color: inherit;
+  font-family: inherit;
+}
+
+button { cursor: pointer; border: none; background: none; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code {
+  font-family: var(--mono);
+  font-size: .88em;
+  padding: .1em .42em;
+  border-radius: var(--r-xs);
+  background: var(--surface-3);
+  color: var(--accent);
+}
+
+svg { width: 100%; height: 100%; display: block; }
+
+/* 所有内联图标统一走描边风格 */
+svg[viewBox] path,
+svg[viewBox] circle,
+svg[viewBox] rect,
+svg[viewBox] line,
+svg[viewBox] polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+[hidden] { display: none !important; }
+
+::selection { background: var(--accent-soft); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--r-full);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background-clip: content-box; background-color: var(--text-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

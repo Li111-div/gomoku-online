@@ -1,9 +1,9 @@
 blank_issues_enabled: false
 contact_links:
   - name: 使用问题 / 想法讨论
-    url: https://github.com/Litt1-div/gomoku-online/discussions
+    url: https://github.com/Li111-div/gomoku-online/discussions
     about: 不确定算不算缺陷？想聊聊思路？请到 Discussions，不要开 Issue
 
   - name: 安全漏洞
-    url: https://github.com/Litt1-div/gomoku-online/security/advisories/new
+    url: https://github.com/Li111-div/gomoku-online/security/advisories/new
     about: 发现安全问题请走私密渠道报告，不要开公开 Issue

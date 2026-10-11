@@ -2,7 +2,7 @@
 
 **服务端权威**的五子棋对战系统。所有对局逻辑都在服务端运行，客户端只负责显示与上报操作 —— 因此它**无法作弊，也不可能和服务端算出不一样的结果**。
 
-[![CI](https://github.com/Litt1-div/gomoku-online/actions/workflows/ci.yml/badge.svg)](https://github.com/Litt1-div/gomoku-online/actions/workflows/ci.yml)
+[![CI](https://github.com/Li111-div/gomoku-online/actions/workflows/ci.yml/badge.svg)](https://github.com/Li111-div/gomoku-online/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.7%2B-blue.svg)](https://www.python.org/)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-0-brightgreen.svg)](#零依赖)
@@ -76,7 +76,7 @@
 ### 1. 启动服务端
 
 ```bash
-git clone https://github.com/Litt1-div/gomoku-online.git
+git clone https://github.com/Li111-div/gomoku-online.git
 cd gomoku-online
 
 python server/server.py            # 默认 8080 端口
